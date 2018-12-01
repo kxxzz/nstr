@@ -9,6 +9,12 @@
 
 
 
+#ifdef ARYLEN
+# undef ARYLEN
+#endif
+#define ARYLEN(a) (sizeof(a) / sizeof((a)[0]))
+
+
 
 
 u32 numstr_str2num(double* num, const char* str, numstr_StrType* outStrType)

@@ -16,6 +16,13 @@
 
 
 
+#ifdef ARYLEN
+# undef ARYLEN
+#endif
+#define ARYLEN(a) (sizeof(a) / sizeof((a)[0]))
+
+
+
 static bool float_eq(float a, float b)
 {
     return fabs(a - b) <= FLT_EPSILON;

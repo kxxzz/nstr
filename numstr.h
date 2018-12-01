@@ -21,11 +21,6 @@ typedef float f32;
 typedef double f64;
 
 
-#define ARYLEN(a) (sizeof(a) / sizeof((a)[0]))
-
-
-
-
 
 
 typedef enum numstr_StrType
