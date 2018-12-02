@@ -38,7 +38,7 @@ typedef enum numstr_StrType
 
 
 
-u32 numstr_str2num(double* num, const char* s, numstr_StrType* outStrType);
+u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStrType);
 u32 numstr_num2str(char* buf, u32 bufSize, double x);
 
 

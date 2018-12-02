@@ -17,7 +17,7 @@
 
 
 
-u32 numstr_str2num(double* num, const char* str, numstr_StrType* outStrType)
+u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStrType)
 {
     numstr_StrType strType = numstr_StrType_DEC;
     u32 off = 0;
@@ -28,7 +28,7 @@ u32 numstr_str2num(double* num, const char* str, numstr_StrType* outStrType)
         {
             *outStrType = numstr_StrType_Invalid;
         }
-        return off;
+        return 0;
     }
     bool floatDoted = false;
     if ('0' == str[off])
@@ -122,14 +122,14 @@ u32 numstr_str2num(double* num, const char* str, numstr_StrType* outStrType)
         }
         ++off;
     }
-    if (numstr_StrType_Invalid == strType)
+    if ((len > 0) && (off != len))
     {
         *num = NAN;
         if (outStrType)
         {
             *outStrType = numstr_StrType_Invalid;
         }
-        return off;
+        return 0;
     }
     switch (strType)
     {
@@ -174,7 +174,10 @@ u32 numstr_str2num(double* num, const char* str, numstr_StrType* outStrType)
         assert(false);
         break;
     }
-    *outStrType = strType;
+    if (outStrType)
+    {
+        *outStrType = strType;
+    }
     return off;
 }
 
