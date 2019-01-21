@@ -11,7 +11,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "numstr.h"
+#include "nstr.h"
 
 
 
@@ -38,9 +38,9 @@ static bool float_eq_almost(float a, float b)
 static void test(void)
 {
     double x;
-    numstr_StrType strType;
+    NSTR_StrType strType;
     u32 off;
-    const char* s[numstr_NumStrTypes] =
+    const char* s[NSTR_NumStrTypes] =
     {
         "0b101101",
         "055",
@@ -50,12 +50,12 @@ static void test(void)
     };
     for (u32 i = 0; i < ARYLEN(s); ++i)
     {
-        off = numstr_str2num(&x, s[i], &strType);
+        off = NSTR_str2num(&x, s[i], (u32)strlen(s[i]), &strType);
         assert(i == strType);
         assert((u32)strlen(s[i]) == off);
         assert(float_eq(45, (float)x));
         char buf[255] = "";
-        u32 off1 = numstr_num2str(buf, sizeof(buf), x);
+        u32 off1 = NSTR_num2str(buf, sizeof(buf), x);
         assert(2 == off1);
         printf("%s\n", buf);
     }

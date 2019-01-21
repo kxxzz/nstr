@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "numstr.h"
+#include "nstr.h"
 
 
 
@@ -17,16 +17,16 @@
 
 
 
-u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStrType)
+u32 NSTR_str2num(double* num, const char* str, u32 len, NSTR_StrType* outStrType)
 {
-    numstr_StrType strType = numstr_StrType_DEC;
+    NSTR_StrType strType = NSTR_StrType_DEC;
     u32 off = 0;
     if ((str[off] < '0') || (str[off] > '9'))
     {
         *num = NAN;
         if (outStrType)
         {
-            *outStrType = numstr_StrType_Invalid;
+            *outStrType = NSTR_StrType_Invalid;
         }
         return 0;
     }
@@ -37,27 +37,27 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
         if      ((('b' == str[off]) || ('B' == str[off])) && str[off + 1])
         {
             ++off;
-            strType = numstr_StrType_BIN;
+            strType = NSTR_StrType_BIN;
         }
         else if ((('o' == str[off]) || ('O' == str[off])) && str[off + 1])
         {
             ++off;
-            strType = numstr_StrType_OCT;
+            strType = NSTR_StrType_OCT;
         }
         else if ((('x' == str[off]) || ('X' == str[off])) && str[off + 1])
         {
             ++off;
-            strType = numstr_StrType_HEX;
+            strType = NSTR_StrType_HEX;
         }
         else if ('.' == str[off])
         {
             ++off;
-            strType = numstr_StrType_Float;
+            strType = NSTR_StrType_FLT;
             floatDoted = true;
         }
         else
         {
-            strType = numstr_StrType_OCT;
+            strType = NSTR_StrType_OCT;
         }
     }
     for (;;)
@@ -66,29 +66,29 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
         {
             break;
         }
-        if (numstr_StrType_BIN == strType)
+        if (NSTR_StrType_BIN == strType)
         {
             if (('0' > str[off]) || ('1' < str[off]))
             {
                 break;
             }
         }
-        else if (numstr_StrType_OCT == strType)
+        else if (NSTR_StrType_OCT == strType)
         {
             if (('0' > str[off]) || ('7' < str[off]))
             {
                 if ((1 == off) && ('0' == str[off - 1]))
                 {
-                    strType = numstr_StrType_DEC;
+                    strType = NSTR_StrType_DEC;
                 }
                 break;
             }
         }
-        else if (numstr_StrType_DEC == strType)
+        else if (NSTR_StrType_DEC == strType)
         {
             if (!floatDoted && ('.' == str[off]))
             {
-                strType = numstr_StrType_Float;
+                strType = NSTR_StrType_FLT;
                 floatDoted = true;
             }
             else if (('0' > str[off]) || ('9' < str[off]))
@@ -96,7 +96,7 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
                 break;
             }
         }
-        else if (numstr_StrType_HEX == strType)
+        else if (NSTR_StrType_HEX == strType)
         {
             if ((('0' > str[off]) || ('9' < str[off])) &&
                 (('a' > str[off]) || ('f' < str[off])) &&
@@ -105,7 +105,7 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
                 break;
             }
         }
-        else if (numstr_StrType_Float == strType)
+        else if (NSTR_StrType_FLT == strType)
         {
             if (!floatDoted && ('.' == str[off]))
             {
@@ -127,19 +127,19 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
         *num = NAN;
         if (outStrType)
         {
-            *outStrType = numstr_StrType_Invalid;
+            *outStrType = NSTR_StrType_Invalid;
         }
         return 0;
     }
     switch (strType)
     {
-    case numstr_StrType_BIN:
+    case NSTR_StrType_BIN:
     {
         char* end;
         *num = strtol(str + 2, &end, 2);
         break;
     }
-    case numstr_StrType_OCT:
+    case NSTR_StrType_OCT:
     {
         char* end;
         if (('o' == str[1]) || ('O' == str[1]))
@@ -152,19 +152,19 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
         }
         break;
     }
-    case numstr_StrType_DEC:
+    case NSTR_StrType_DEC:
     {
         char* end;
         *num = strtol(str, &end, 10);
         break;
     }
-    case numstr_StrType_HEX:
+    case NSTR_StrType_HEX:
     {
         char* end;
         *num = strtol(str + 2, &end, 16);
         break;
     }
-    case numstr_StrType_Float:
+    case NSTR_StrType_FLT:
     {
         char* end;
         *num = strtod(str, &end);
@@ -186,7 +186,7 @@ u32 numstr_str2num(double* num, const char* str, u32 len, numstr_StrType* outStr
 
 
 
-u32 numstr_num2str(char* buf, u32 bufSize, double x)
+u32 NSTR_num2str(char* buf, u32 bufSize, double x)
 {
     double d = x - (double)(int)x;
     if (d < FLT_EPSILON)
